@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+
+repositories {
+	mavenCentral()
+}		
+
+// Write the plugin's classpath to a file to share with the tests
+task createClasspathManifest {
+        def outputDir = file("$buildDir/$name" )
+
+       inputs.files sourceSets.main .runtimeClasspath
+       outputs.dir outputDir
+
+       doLast {
+              outputDir.mkdirs()
+              file( "$outputDir/plugin-classpath.txt" ).text = sourceSets.main .runtimeClasspath.join("\n")
+       }
+}
+
+dependencies {
+       compile 'org.codehaus.groovy:groovy:2.4.4'
+       compile gradleApi()
+       testCompile gradleTestKit()
+       testCompile( 'com.netflix.nebula:nebula-test:4.0.0')
+       testRuntime files(tasks.createClasspathManifest)
+}
