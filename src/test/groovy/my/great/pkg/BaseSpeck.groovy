@@ -28,5 +28,12 @@ public class BaseSpeck extends Specification{
 
 		pluginClasspathResource. readLines().collect { new File(it ) }
 	}
+
+	void zipProject() {
+		AntBuilder ant = new AntBuilder();
+
+		ant.zip(destfile: 'C:/temp_42/test.zip',
+			   basedir: "$testProjectDir.root" )
+	}
 }
 
