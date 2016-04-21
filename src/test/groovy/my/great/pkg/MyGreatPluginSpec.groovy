@@ -3,7 +3,7 @@ package my.great.pkg
 import org.gradle.testkit.runner.GradleRunner
 import static org.gradle.testkit.runner.TaskOutcome.*
 
-class MySuperPluginSpec extends BaseSpeck {
+class MyGreatPluginSpec extends BaseSpeck {
 
 	def setup() {
 		buildFile << """
