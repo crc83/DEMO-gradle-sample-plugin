@@ -15,11 +15,7 @@ class MySuperPluginSpec extends BaseSpeck {
                     version = '0.1.0'
                     group = 'foo.bar'
 
-					//http://stackoverflow.com/questions/11474729/how-to-build-sources-jar-with-gradle
-					task sourcesJar(type: Jar, dependsOn: classes) {
-					    classifier = 'sources'
-					    from sourceSets.main.allSource
-					}
+
               """ .stripIndent ()
 
 		settingsFile << """rootProject.name = 'foo-bar'""" .stripIndent ()
