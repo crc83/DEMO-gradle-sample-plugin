@@ -65,9 +65,8 @@ class MySuperPluginSpec extends BaseSpeck {
 								.build() //
 
 		 then:
-		 	zipProject()
 		 	result.task( ":sourcesJar").outcome == SUCCESS //import static org.gradle.testkit.runner.TaskOutcome.*
-			File resultJar= new File(testProjectDir .root, 'build/libs/test-0.1.0-sources.jar' )
+			File resultJar= new File(testProjectDir .root, 'build/libs/foo-bar-0.1.0-sources.jar' )
 			resultJar.exists()
 	}
 
