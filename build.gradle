@@ -6,6 +6,9 @@ repositories {
 	mavenCentral()
 }		
 
+group = 'my.great.pkg'
+version = '0.00.001-SNAPSHOT'
+
 // Write the plugin's classpath to a file to share with the tests
 task createClasspathManifest {
         def outputDir = file("$buildDir/$name" )
