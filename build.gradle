@@ -1,12 +1,16 @@
 buildscript {
 	repositories {
 		maven {
+			url "http://repo.jenkins-ci.org/releases/"
+		}	
+		maven {
 			url "https://plugins.gradle.org/m2/"
 		}
 	}
 	dependencies {
 		classpath('org.asciidoctor:asciidoctor-gradle-plugin:1.5.3',
-				'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11')
+				'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11',
+				'com.sbelei:gradle-jenkins-plugin:1.4.9')
 	}
 }
 
@@ -14,6 +18,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'com.sbelei.jenkins'
 
 repositories {
 	mavenCentral()
@@ -21,6 +26,69 @@ repositories {
 
 group = 'my.great.pkg'
 version = '0.00.001-SNAPSHOT'
+
+jenkins {
+	servers {
+		localhost {
+			url 'http://localhost:9090'
+			secure true
+			username "ADMIN"
+			password "admin"
+		}
+	}
+
+	defaultServer servers.localhost
+
+	jobs {
+		build_job {
+			server servers.localhost
+
+			name = 'sample-plugin-job'
+
+			dsl {
+				scm {
+					git {
+						remote {
+							name('origin')
+							url('https://github.com/crc83/DEMO-gradle-sample-plugin.git')
+						}
+					}
+				}
+
+
+				triggers {
+					scm '*/15 * * * *'
+				}
+
+				steps {
+					gradle {
+						tasks 'jar'
+						useWrapper false
+						gradleName 'GRADLE4.5.1 UNIX'
+						passAsProperties true
+					}
+					gradle {
+						tasks 'asciidoc'
+						useWrapper false
+						gradleName 'GRADLE4.5.1 UNIX'
+						passAsProperties true
+					}
+				}
+
+				publishers {
+					archiveArtifacts 'build/libs/*.jar,build/asciidoc/html5/*.html,build/asciidoc/pdf/*.pdf'
+					archiveJunit ('build/test-results/test/*.xml') {
+						allowEmptyResults()
+						retainLongStdout()
+					}
+					cobertura ('build/reports/cobertura/coverage.xml') {
+						failNoReports(false)
+					}
+				}
+			}
+		}
+	}
+}
 
 // Write the plugin's classpath to a file to share with the tests
 task createClasspathManifest {

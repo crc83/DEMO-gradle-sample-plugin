@@ -4,3 +4,9 @@
 == Overview
 This is gradle plugin only for demo purposes.
 It contains samples for my different presentations regarding gradle
+
+To create update jenkins job run following command
+[code, bash]
+----
+gradle updateJenkinsItems
+----
