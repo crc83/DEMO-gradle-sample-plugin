@@ -66,25 +66,7 @@ jenkins {
 
 				steps {
 					gradle {
-						tasks 'cobertura'
-						useWrapper false
-						gradleName 'GRADLE4.5.1 UNIX'
-						passAsProperties true
-					}
-					gradle {
-						tasks 'sonarqube'
-						useWrapper false
-						gradleName 'GRADLE4.5.1 UNIX'
-						passAsProperties true
-					}
-					gradle {
-						tasks 'jar'
-						useWrapper false
-						gradleName 'GRADLE4.5.1 UNIX'
-						passAsProperties true
-					}
-					gradle {
-						tasks 'asciidoc'
+						tasks 'dailyBuild'
 						useWrapper false
 						gradleName 'GRADLE4.5.1 UNIX'
 						passAsProperties true
@@ -148,6 +130,10 @@ task createClasspathManifest {
               outputDir.mkdirs()
               file( "$outputDir/plugin-classpath.txt" ).text = sourceSets.main .runtimeClasspath.join("\n")
        }
+}
+
+task dailyBuild(type: GradleBuild) {
+	tasks = ['cobertura', 'sonarqube' , 'jar', 'asciidoc']
 }
 
 dependencies {
