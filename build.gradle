@@ -10,7 +10,8 @@ buildscript {
 	dependencies {
 		classpath('org.asciidoctor:asciidoctor-gradle-plugin:1.5.3',
 				'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11',
-				'com.sbelei:gradle-jenkins-plugin:1.4.9')
+				'com.sbelei:gradle-jenkins-plugin:1.4.9',
+				'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2')
 	}
 }
 
@@ -19,6 +20,7 @@ apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'com.sbelei.jenkins'
+apply plugin: 'org.sonarqube'
 
 repositories {
 	mavenCentral()
@@ -62,6 +64,12 @@ jenkins {
 
 				steps {
 					gradle {
+						tasks 'sonarqube'
+						useWrapper false
+						gradleName 'GRADLE4.5.1 UNIX'
+						passAsProperties true
+					}
+					gradle {
 						tasks 'jar'
 						useWrapper false
 						gradleName 'GRADLE4.5.1 UNIX'
@@ -89,6 +97,20 @@ jenkins {
 		}
 	}
 }
+
+test {
+	ignoreFailures = true
+}
+
+sonarqube {
+	properties {
+		property "sonar.sourceEncoding", "UTF-8"
+		property "sonar.organization", "crc83-github"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.login", "${github_sonar_token}"
+	}
+}
+
 
 // Write the plugin's classpath to a file to share with the tests
 task createClasspathManifest {

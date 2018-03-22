@@ -10,3 +10,11 @@ To create update jenkins job run following command
 ----
 gradle updateJenkinsItems
 ----
+
+To check project with SonarQube run following command
+[code, bash]
+----
+gradle sonarcube
+----
+and observe results at : https://sonarcloud.io/projects
+Do not forget to define github_sonar_token at %USER_HOME%/.gradle/gradle.properties
