@@ -1,0 +1,6 @@
+= {project-name}
+{project-version}
+
+== Overview
+This is gradle plugin only for demo purposes.
+It contains samples for my different presentations regarding gradle
